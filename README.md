@@ -1,6 +1,3 @@
-Ah, paham! Kamu ingin README-nya sekaligus **ngasih skrip install otomatis**. Kita bisa gabungkan semuanya jadi satu README yang rapi, plus sertakan `install.sh` yang bisa dipanggil langsung dari satu command. Contohnya seperti ini:
-
-````markdown
 # commitz
 
 `commitz` adalah CLI sederhana untuk membuat commit message yang konsisten (mirip commitizen) dengan antarmuka TUI berbasis `crossterm`.
@@ -14,7 +11,6 @@ Cukup jalankan satu command ini:
 ```bash
 bash <(curl -s https://example.com/install.sh)
 ```
-````
 
 > Script `install.sh` akan melakukan:
 >
