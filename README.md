@@ -9,7 +9,7 @@
 Cukup jalankan satu command ini:
 
 ```bash
-bash <(curl -s https://example.com/install.sh)
+bash <(curl -s https://github.com/rynsh1506/commitz/blob/main/install.sh)
 ```
 
 > Script `install.sh` akan melakukan:
@@ -23,13 +23,12 @@ Contoh isi `install.sh`:
 
 ```bash
 #!/usr/bin/env bash
-
-# Download latest commitz binary
 mkdir -p ~/.local/bin
-curl -L https://example.com/bin/commitz -o ~/.local/bin/commitz
+
+curl -L https://github.com/rynsh1506/commitz/raw/refs/heads/main/bin/commitz -o ~/.local/bin/commitz
+
 chmod +x ~/.local/bin/commitz
 
-# Pastikan ~/.local/bin ada di PATH
 if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
     echo "Added ~/.local/bin to PATH. Restart terminal or run 'source ~/.bashrc'."
