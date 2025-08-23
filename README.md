@@ -9,7 +9,7 @@
 Cukup jalankan satu command ini:
 
 ```bash
-bash <(curl -s https://github.com/rynsh1506/commitz/blob/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/rynsh1506/commitz/main/install.sh)
 ```
 
 > Script `install.sh` akan melakukan:
