@@ -13,7 +13,7 @@ if (Test-Path $BinaryPath) {
 }
 
 Write-Host "⬇️ Downloading latest commitz.exe..."
-Invoke-WebRequest -Uri "https://github.com/rynsh1506/commitz/releases/download/v0.1.0/commitz.exe" -OutFile $BinaryPath
+Invoke-WebRequest -Uri "https://github.com/rynsh1506/commitz/releases/download/v0.1.1/commitz.exe" -OutFile $BinaryPath
 
 # Tambah PATH kalau belum ada
 if (-not ($env:Path -split ";" | ForEach-Object { $_.Trim() } | Where-Object { $_ -eq $BinDir })) {
