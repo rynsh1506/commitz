@@ -98,8 +98,6 @@ Dibuat dengan ❤️ menggunakan **Rust + Crossterm**.
 
 ![Tampilan Commitz](assets/ss3.png)
 
-![Tampilan Commitz](assets/ss4.png)
-
 ![Tampilan Commitz](assets/ss5.png)
 
 ---
