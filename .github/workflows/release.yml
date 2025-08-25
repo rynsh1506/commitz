@@ -50,7 +50,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: commitz-windows-latest
-          path: target/release/commitz${{ runner.os == 'Windows' && '.exe' || '' }}
+          path: ./win
 
       - name: Prepare files for release
         run: |
