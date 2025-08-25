@@ -42,10 +42,10 @@ commitz
 
 1. Pastikan sudah berada di folder project Git dan jalankan:
 
-   ```bash
-   git init
+```bash
+git init
 
-   ```
+```
 
 2. Pastikan ada file yang sudah di-`git add`.
 3. Jalankan:
