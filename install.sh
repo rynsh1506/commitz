@@ -9,20 +9,27 @@ OS_NAME=$(uname -s)
 case "$OS_NAME" in
     Linux*)   FILE_NAME="commitz-linux";;
     Darwin*)  FILE_NAME="commitz-mac";;
-    MINGW*|MSYS*) FILE_NAME="commitz.exe";;  
+    MINGW*|MSYS*|CYGWIN*) FILE_NAME="commitz.exe";;
     *)        echo "Unsupported OS: $OS_NAME"; exit 1;;
 esac
 
 BINARY_PATH="$BIN_DIR/commitz"
 
 # Hapus binary lama
-if [ -f "$BINARY_PATH" ]; then
+if [ -f "$BINARY_PATH" ] || [ -f "$BINARY_PATH.exe" ]; then
     echo "🗑️ Removing old commitz binary..."
-    rm -f "$BINARY_PATH"
+    rm -f "$BINARY_PATH" "$BINARY_PATH.exe"
 fi
 
 echo "⬇️ Downloading latest $FILE_NAME..."
 curl -L "https://github.com/rynsh1506/commitz/releases/download/v0.1.1/$FILE_NAME" -o "$BINARY_PATH"
+
+# Kalau Windows kasih ekstensi .exe
+if [[ "$FILE_NAME" == *".exe" ]]; then
+    mv "$BINARY_PATH" "$BINARY_PATH.exe"
+    BINARY_PATH="$BINARY_PATH.exe"
+fi
+
 chmod +x "$BINARY_PATH"
 
 # Setup PATH di shell
