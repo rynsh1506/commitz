@@ -57,7 +57,7 @@ jobs:
           mkdir -p release
           cp linux/commitz release/commitz-linux
           cp mac/commitz release/commitz-mac
-          cp win/commitz release/commitz.exe
+          cp win/commitz.exe release/commitz.exe
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
