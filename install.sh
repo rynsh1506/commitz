@@ -10,7 +10,7 @@ if [ -f "$HOME/.local/bin/commitz" ]; then
 fi
 
 echo "⬇️ Downloading latest commitz binary..."
-curl -L "https://github.com/rynsh1506/commitz/raw/refs/heads/main/bin/commitz" -o ~/.local/bin/commitz
+curl -L "https://github.com/rynsh1506/commitz/releases/download/v0.1.0/commitz" -o ~/.local/bin/commitz
 chmod +x ~/.local/bin/commitz
 
 # Deteksi shell
