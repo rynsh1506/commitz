@@ -33,16 +33,23 @@ jobs:
             cargo build --release
           fi
 
-      - name: Upload artifact per OS
+      - name: Copy Linux artifact
+        if: matrix.os == 'ubuntu-latest'
         run: |
           mkdir -p artifacts
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            cp target/x86_64-unknown-linux-musl/release/commitz artifacts/commitz-linux
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            cp target/release/commitz artifacts/commitz-mac
-          else
-            cp target/release/commitz.exe artifacts/commitz.exe
-          fi
+          cp target/x86_64-unknown-linux-musl/release/commitz artifacts/commitz-linux
+
+      - name: Copy Mac artifact
+        if: matrix.os == 'macos-latest'
+        run: |
+          mkdir -p artifacts
+          cp target/release/commitz artifacts/commitz-mac
+
+      - name: Copy Windows artifact
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir -p artifacts
+          cp target/release/commitz.exe artifacts/commitz.exe
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
