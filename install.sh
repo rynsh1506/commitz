@@ -21,7 +21,7 @@ if [ -f "$BINARY_PATH" ]; then
 fi
 
 echo "⬇️ Downloading latest $FILE_NAME..."
-curl -L "https://github.com/rynsh1506/commitz/releases/download/v0.1.0/$FILE_NAME" -o "$BINARY_PATH"
+curl -L "https://github.com/rynsh1506/commitz/releases/download/v0.1.1/$FILE_NAME" -o "$BINARY_PATH"
 chmod +x "$BINARY_PATH"
 
 # Setup PATH di shell

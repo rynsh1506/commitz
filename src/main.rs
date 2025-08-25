@@ -2,7 +2,7 @@ use commitz::commit::{
     reader::{read_commit_type, read_desc, read_issues, read_multiline, read_scope},
     renderer::{render_commit, render_scope},
     types::RenderCommit,
-    validator::{confirm_question, ensure_staged_files},
+    validator::{confirm_question, ensure_git_repo, ensure_staged_files},
 };
 use crossterm::{
     execute,
@@ -22,6 +22,7 @@ fn main() -> io::Result<()> {
         return Ok(());
     }
 
+    ensure_git_repo()?;
     ensure_staged_files()?;
     terminal::enable_raw_mode()?;
     let mut stdout = stdout();

@@ -1,6 +1,6 @@
 use std::{
     io::{self, stdout, Write},
-    process::Command,
+    process::{Command, Stdio},
 };
 
 use crossterm::{
@@ -90,6 +90,28 @@ pub fn confirm_question(prompt: &str) -> io::Result<bool> {
             }
         }
     }
+}
+
+pub fn ensure_git_repo() -> io::Result<()> {
+    let output = Command::new("git")
+        .args(["rev-parse", "--is-inside-work-tree"])
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .output()?;
+
+    if !output.status.success() {
+        let mut stdout = stdout();
+        execute!(
+            stdout,
+            SetForegroundColor(Color::Red),
+            Print("❌ Not a git repository! Run git init first.\n"),
+            ResetColor
+        )?;
+        std::process::exit(1);
+    }
+
+    Ok(())
 }
 
 pub fn ensure_staged_files() -> io::Result<()> {
