@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: commitz-${{ matrix.os }}
-          path: target/release/commitz
+          path: target/release/commitz${{ runner.os == 'Windows' && '.exe' || '' }}
 
   release:
     needs: build
@@ -50,7 +50,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: commitz-windows-latest
-          path: ./win
+          path: target/release/commitz${{ runner.os == 'Windows' && '.exe' || '' }}
 
       - name: Prepare files for release
         run: |
