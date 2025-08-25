@@ -27,8 +27,8 @@ jobs:
       - name: Upload artifact per OS
         uses: actions/upload-artifact@v4
         with:
-          name: commitz-${{ matrix.os }}
-          path: target/release/commitz* -> target/release/commitz-${{ matrix.os }}
+          name: commitz-${{ matrix.os }}-v${{ github.ref_name }}
+          path: target/release/commitz
 
   release:
     needs: build
@@ -37,19 +37,19 @@ jobs:
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
-          name: commitz-ubuntu-latest
+          name: commitz-ubuntu-latest-v${{ github.ref_name }}
           path: ./linux
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
         with:
-          name: commitz-macos-latest
+          name: commitz-macos-latest-v${{ github.ref_name }}
           path: ./mac
 
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
-          name: commitz-windows-latest
+          name: commitz-windows-latest-v${{ github.ref_name }}
           path: ./win
 
       - name: Prepare files for release
