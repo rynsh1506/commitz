@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
+set -e
+
 mkdir -p ~/.local/bin
 
-curl -L https://github.com/rynsh1506/commitz/raw/refs/heads/main/bin/commitz -o ~/.local/bin/commitz
+if [ -f "$HOME/.local/bin/commitz" ]; then
+    echo "🗑️ Menghapus binary commitz lama..."
+    rm -f "$HOME/.local/bin/commitz"
+fi
+
+echo "⬇️ Downloading latest commitz binary..."
+curl -L "https://github.com/rynsh1506/commitz/raw/refs/heads/main/bin/commitz" -o ~/.local/bin/commitz
 chmod +x ~/.local/bin/commitz
 
 # Deteksi shell
@@ -14,13 +22,12 @@ if [ "$SHELL_NAME" = "bash" ]; then
 elif [ "$SHELL_NAME" = "zsh" ]; then
     RC_FILE="$HOME/.zshrc"
 else
-    RC_FILE="$HOME/.profile" # fallback
+    RC_FILE="$HOME/.profile" 
 fi
 
-# Tambahkan ~/.local/bin ke PATH kalau belum ada
 if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$RC_FILE"
-    echo "Added ~/.local/bin to PATH in $RC_FILE. Restart terminal or run 'source $RC_FILE'."
+    echo "🔧 Added ~/.local/bin to PATH in $RC_FILE. Restart terminal or run: source $RC_FILE"
 fi
 
-echo "✅ commitz installed! Just run: commitz"
+echo "✅ commitz installed! Run: commitz"

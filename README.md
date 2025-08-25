@@ -4,56 +4,35 @@
 
 ---
 
-## 🚀 Install (Linux)
+## 🚀 Install
 
-Cukup jalankan satu command ini:
+### Linux / macOS / Windows (Git Bash)
+
+Jalankan:
 
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/rynsh1506/commitz/main/install.sh)
 ```
 
-> Script `install.sh` akan melakukan:
->
-> 1. Download binary `commitz` untuk Linux
-> 2. Simpan ke `~/.local/bin/commitz`
-> 3. Set executable (`chmod +x`)
-> 4. Tambahkan `~/.local/bin` ke `$PATH` kalau belum ada
-
-Contoh isi `install.sh`:
+Lalu cek dengan:
 
 ```bash
-#!/usr/bin/env bash
-
-mkdir -p ~/.local/bin
-
-curl -L https://github.com/rynsh1506/commitz/raw/refs/heads/main/bin/commitz -o ~/.local/bin/commitz
-chmod +x ~/.local/bin/commitz
-
-# Deteksi shell
-SHELL_NAME=$(basename "$SHELL")
-RC_FILE=""
-
-if [ "$SHELL_NAME" = "bash" ]; then
-    RC_FILE="$HOME/.bashrc"
-elif [ "$SHELL_NAME" = "zsh" ]; then
-    RC_FILE="$HOME/.zshrc"
-else
-    RC_FILE="$HOME/.profile" # fallback
-fi
-
-# Tambahkan ~/.local/bin ke PATH kalau belum ada
-if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$RC_FILE"
-    echo "Added ~/.local/bin to PATH in $RC_FILE. Restart terminal or run 'source $RC_FILE'."
-fi
-
-echo "✅ commitz installed! Just run: commitz"
-
+commitz
 ```
 
-Setelah itu langsung bisa pakai:
+---
 
-```bash
+### Windows (PowerShell)
+
+Jalankan:
+
+```powershell
+irm https://raw.githubusercontent.com/rynsh1506/commitz/main/install.ps1 | iex
+```
+
+Lalu cek dengan:
+
+```powershell
 commitz
 ```
 
@@ -61,30 +40,73 @@ commitz
 
 ## 📝 Cara Pakai
 
-1. Pastikan ada file yang sudah di-`git add`.
-2. Jalankan:
+1. Pastikan sudah berada di folder project Git dan jalankan:
+
+   ```bash
+   git init
+
+   ```
+
+2. Pastikan ada file yang sudah di-`git add`.
+3. Jalankan:
 
 ```bash
 commitz
 ```
 
-3. Pilih jenis commit dengan panah atas/bawah.
-4. Ketik pesan commit.
-5. Tekan **Enter**, `git commit` akan dijalankan otomatis.
+4. Pilih jenis commit dengan panah atas/bawah.
+5. Isi promt pesan commit.
+6. Ketik **y**/**n**, untuk menjalankan `git commit` atau membatalkan .
 
 ---
 
 ## 📂 Struktur Project
 
 ```
-.
-├── src/              # kode sumber (untuk developer)
+commitz/
 ├── Cargo.toml
-├── bin/
-│   └── commitz       # binary Linux siap pakai
-├── install.sh        # script untuk install one-liner
-└── README.md
+├── README.md
+├── install.sh
+├── install.ps1
+├── src/
+│   ├── lib.rs            # expose semua module
+│   ├── main.rs           # CLI entrypoint
+│   └── commit/
+│       ├── mod.rs        # pub mod commit { ... }
+│       ├── types.rs      # definisi CommitType, dsb
+│       ├── reader.rs     # baca commit config/json
+│       ├── renderer.rs   # render ke layar pakai crossterm
+│       ├── navigation.rs # handle arrow key / pointer
+│       ├── validator.rs  # validasi input (Y/n, dsb)
+│       └── signal.rs     # handle ctrl+c / exit clean
 ```
+
+---
+
+## 🤝 Kontribusi
+
+Kontribusi sangat terbuka 🚀
+
+1. **Fork** repository ini
+2. Buat branch baru:
+
+   ```bash
+   git checkout -b feature/nama-fitur
+   ```
+
+3. Commit perubahanmu:
+
+   ```bash
+   git commit -m "feat: tambah fitur X"
+   ```
+
+4. Push ke branch:
+
+   ```bash
+   git push origin feature/nama-fitur
+   ```
+
+5. Buat **Pull Request** 🎉
 
 ---
 
