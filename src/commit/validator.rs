@@ -28,14 +28,19 @@ pub fn confirm_question(prompt: &str) -> io::Result<bool> {
             ResetColor,
             SetForegroundColor(Color::DarkGrey),
             Print(" (Y/n) "),
-            ResetColor
+            ResetColor,
+            SetForegroundColor(Color::DarkGreen),
         )?;
         stdout.flush()?;
 
         let input = handle_prompt_input()?.trim().to_lowercase();
 
         match input.as_str() {
-            "y" | "yes" => return Ok(true),
+            "y" | "yes" => {
+                execute!(stdout, cursor::RestorePosition)?;
+                stdout.flush()?;
+                return Ok(true);
+            }
             "n" | "no" => {
                 execute!(
                     stdout,
@@ -59,26 +64,6 @@ pub fn confirm_question(prompt: &str) -> io::Result<bool> {
                 )?;
                 stdout.flush()?;
             }
-        }
-    }
-}
-
-pub fn ensure_git_repo() -> io::Result<()> {
-    let status = Command::new("sh")
-        .arg("-c")
-        .arg("git rev-parse --is-inside-work-tree || clear")
-        .status();
-
-    match status {
-        Ok(s) if s.success() => Ok(()),
-        _ => {
-            execute!(
-                stdout(),
-                SetForegroundColor(Color::Red),
-                Print("❌ Not a git repository! Run `git init` first.\n"),
-                ResetColor
-            )?;
-            std::process::exit(1);
         }
     }
 }

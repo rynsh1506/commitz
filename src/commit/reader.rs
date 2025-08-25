@@ -38,7 +38,7 @@ pub fn read_desc() -> io::Result<String> {
         let trimmed = input.trim();
 
         if !trimmed.is_empty() {
-            execute!(stdout, ResetColor).unwrap();
+            execute!(stdout, ResetColor)?;
             return Ok(trimmed.to_string());
         } else if !error_printed {
             execute!(
@@ -50,13 +50,12 @@ pub fn read_desc() -> io::Result<String> {
                 Print("\n>> [ERROR] input is required"),
                 ResetColor,
                 cursor::RestorePosition,
-            )
-            .unwrap();
-            stdout.flush().unwrap();
+            )?;
+            stdout.flush()?;
             error_printed = true;
         } else {
-            execute!(stdout, cursor::RestorePosition).unwrap();
-            stdout.flush().unwrap();
+            execute!(stdout, cursor::RestorePosition)?;
+            stdout.flush()?;
         }
     }
 }
