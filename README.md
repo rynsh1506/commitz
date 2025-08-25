@@ -90,7 +90,7 @@ Dibuat dengan ❤️ menggunakan **Rust + Crossterm**.
 
 ---
 
-### 📸 Tampilan TUI
+### 📸 Tampilan TUI Commitz
 
 ![Tampilan Commitz](assets/ss1.png)
 
