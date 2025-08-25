@@ -30,6 +30,7 @@ pub fn confirm_question(prompt: &str) -> io::Result<bool> {
             Print(" (Y/n) "),
             ResetColor,
             SetForegroundColor(Color::DarkGreen),
+            cursor::SavePosition,
         )?;
         stdout.flush()?;
 

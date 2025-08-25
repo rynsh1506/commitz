@@ -71,12 +71,19 @@ pub fn read_multiline(prompt: &str) -> io::Result<String> {
         SetForegroundColor(Color::DarkGrey),
         Print("(press Enter to skip):\n"),
         ResetColor,
-        cursor::SavePosition,
         SetForegroundColor(Color::DarkGreen)
     )?;
     stdout.flush()?;
 
     let input = handle_prompt_input()?;
+
+    if input.is_empty() {
+        execute!(
+            stdout,
+            terminal::Clear(ClearType::CurrentLine),
+            cursor::RestorePosition
+        )?
+    };
 
     Ok(input
         .trim()
@@ -124,6 +131,12 @@ pub fn read_issues() -> io::Result<(String, String)> {
         stdout.flush()?;
 
         issue_refs = handle_prompt_input()?.trim().to_string();
+    } else {
+        execute!(
+            stdout,
+            terminal::Clear(ClearType::CurrentLine),
+            cursor::RestorePosition
+        )?
     }
 
     Ok((issue_prefix, issue_refs))
@@ -173,9 +186,8 @@ pub fn read_scope(chosen_scope: &str) -> io::Result<String> {
             ResetColor,
             SetForegroundColor(Color::DarkGreen),
         )?;
-        io::stdout().flush()?;
-        let mut custom_scope = String::new();
-        io::stdin().read_line(&mut custom_scope)?;
+        stdout.flush()?;
+        let custom_scope = handle_prompt_input()?;
         format!("({})", custom_scope.trim())
     } else {
         "".to_string()

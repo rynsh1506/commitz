@@ -65,7 +65,7 @@ pub fn render_commit(stdout: &mut impl Write, parts: &RenderCommit) -> io::Resul
         stdout,
         SetForegroundColor(Color::DarkGrey),
         Print("\n###--------------------------------------------------------###\n\n\n"),
-        ResetColor
+        ResetColor,
     )?;
 
     Ok(())
@@ -145,24 +145,23 @@ pub fn render_scope(chosen_type: &CommitType) -> io::Result<String> {
     let mut cursor = 0;
     let window_size = 2;
 
-    execute!(
-        stdout,
-        SetForegroundColor(Color::DarkGreen),
-        Print("? "),
-        ResetColor,
-        Print("Select the type of change that you're committing: "),
-        ResetColor,
-        SetForegroundColor(Color::DarkGreen),
-        Print(format!(
-            "{} : {}\n",
-            chosen_type.key, chosen_type.description
-        )),
-        ResetColor,
-    )?;
-
     stdout.flush()?;
 
     let chosen_scope = loop {
+        execute!(
+            stdout,
+            SetForegroundColor(Color::DarkGreen),
+            Print("? "),
+            ResetColor,
+            Print("Select the type of change that you're committing: "),
+            ResetColor,
+            SetForegroundColor(Color::DarkGreen),
+            Print(format!(
+                "{} : {}\n",
+                chosen_type.key, chosen_type.description
+            )),
+            ResetColor,
+        )?;
         execute!(
             stdout,
             SetForegroundColor(Color::DarkGreen),
@@ -170,7 +169,7 @@ pub fn render_scope(chosen_type: &CommitType) -> io::Result<String> {
             Print("? "),
             ResetColor,
             Print(format!(
-                "Denote the SCOPE of this change (optional) [{}]:",
+                "Denote the SCOPE of this change (optional) : {}",
                 chosen_type.key
             )),
             ResetColor
