@@ -21,14 +21,34 @@ jobs:
           toolchain: stable
           override: true
 
+      - name: Install musl target (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: rustup target add x86_64-unknown-linux-musl
+
       - name: Build release binary
-        run: cargo build --release
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            cargo build --release --target x86_64-unknown-linux-musl
+          else
+            cargo build --release
+          fi
 
       - name: Upload artifact per OS
+        run: |
+          mkdir -p artifacts
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            cp target/x86_64-unknown-linux-musl/release/commitz artifacts/commitz-linux
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            cp target/release/commitz artifacts/commitz-mac
+          else
+            cp target/release/commitz.exe artifacts/commitz.exe
+          fi
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: commitz-${{ matrix.os }}
-          path: target/release/commitz${{ runner.os == 'Windows' && '.exe' || '' }}
+          path: artifacts/*
 
   release:
     needs: build
@@ -55,8 +75,8 @@ jobs:
       - name: Prepare files for release
         run: |
           mkdir -p release
-          cp linux/commitz release/commitz-linux
-          cp mac/commitz release/commitz-mac
+          cp linux/commitz-linux release/commitz-linux
+          cp mac/commitz-mac release/commitz-mac
           cp win/commitz.exe release/commitz.exe
 
       - name: Upload to GitHub Release
