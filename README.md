@@ -83,31 +83,28 @@ commitz/
 
 ---
 
-## 🤝 Kontribusi
+## 🤝 Tentang Commitz
 
-Kontribusi sangat terbuka 🚀
-
-1. **Fork** repository ini
-2. Buat branch baru:
-
-   ```bash
-   git checkout -b feature/nama-fitur
-   ```
-
-3. Commit perubahanmu:
-
-   ```bash
-   git commit -m "feat: tambah fitur X"
-   ```
-
-4. Push ke branch:
-
-   ```bash
-   git push origin feature/nama-fitur
-   ```
-
-5. Buat **Pull Request** 🎉
+Commitz adalah aplikasi **TUI (Text User Interface)** untuk membantu membuat pesan commit sesuai standar konvensi.  
+Dibuat dengan ❤️ menggunakan **Rust + Crossterm**.
 
 ---
 
-Dibuat dengan ❤️ menggunakan Rust + Crossterm.
+### 📸 Tampilan TUI
+
+![Tampilan Commitz](assets/ss1.png)
+
+![Tampilan Commitz](assets/ss2.png)
+
+![Tampilan Commitz](assets/ss3.png)
+
+![Tampilan Commitz](assets/ss4.png)
+
+![Tampilan Commitz](assets/ss5.png)
+
+---
+
+## 👨‍💻 Author
+
+Created by [@rynsh1506](https://github.com/rynsh1506)  
+Jika ada ide, kritik, atau saran jangan ragu buat buka **issue** atau bikin **PR** 🚀
