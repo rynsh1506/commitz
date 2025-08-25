@@ -9,7 +9,7 @@ OS_NAME=$(uname -s)
 case "$OS_NAME" in
     Linux*)   FILE_NAME="commitz-linux";;
     Darwin*)  FILE_NAME="commitz-mac";;
-    *)        echo "Unsupported OS: $OS_NAME"; exit 1;;
+    MINGW*|MSYS*)        echo "Unsupported OS: $OS_NAME"; exit 1;;
 esac
 
 BINARY_PATH="$BIN_DIR/commitz"
