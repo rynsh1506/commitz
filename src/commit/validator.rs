@@ -4,7 +4,8 @@ use std::{
 };
 
 use crossterm::{
-    cursor, execute,
+    cursor::{self, RestorePosition, SavePosition},
+    execute,
     style::{Color, Print, ResetColor, SetForegroundColor},
     terminal::{self, ClearType},
 };
@@ -13,55 +14,77 @@ use crate::commit::navigation::handle_prompt_input;
 
 pub fn confirm_question(prompt: &str) -> io::Result<bool> {
     let mut stdout = stdout();
-    let (_, term_height) = terminal::size()?;
-    let prompt_row = term_height - 2;
+    terminal::enable_raw_mode()?;
+
+    let (_, row) = cursor::position()?;
+    execute!(stdout, SavePosition)?;
+
+    execute!(
+        stdout,
+        cursor::MoveTo(0, row - 1),
+        SetForegroundColor(Color::DarkGreen),
+        Print("? "),
+        ResetColor,
+        Print(prompt),
+        ResetColor,
+        SetForegroundColor(Color::DarkGrey),
+        Print(" (Y/n) "),
+        ResetColor,
+        SetForegroundColor(Color::DarkGreen),
+        SavePosition
+    )?;
 
     loop {
         execute!(
             stdout,
-            cursor::MoveTo(0, prompt_row),
-            terminal::Clear(ClearType::CurrentLine),
-            SetForegroundColor(Color::DarkGreen),
-            Print("? "),
-            ResetColor,
-            Print(prompt),
-            ResetColor,
-            SetForegroundColor(Color::DarkGrey),
-            Print(" (Y/n) "),
-            ResetColor,
-            SetForegroundColor(Color::DarkGreen),
-            cursor::SavePosition,
+            RestorePosition,
+            terminal::Clear(ClearType::UntilNewLine)
         )?;
         stdout.flush()?;
 
-        let input = handle_prompt_input()?.trim().to_lowercase();
+        let input = handle_prompt_input()?;
 
-        match input.as_str() {
+        let input_lower = input.trim().to_lowercase();
+
+        match input_lower.as_str() {
             "y" | "yes" => {
-                execute!(stdout, cursor::RestorePosition)?;
-                stdout.flush()?;
+                terminal::disable_raw_mode()?;
                 return Ok(true);
             }
             "n" | "no" => {
                 execute!(
                     stdout,
-                    cursor::MoveTo(0, prompt_row + 1),
-                    terminal::Clear(ClearType::CurrentLine),
+                    RestorePosition,
+                    terminal::Clear(ClearType::UntilNewLine),
+                    cursor::MoveToNextLine(1),
                     SetForegroundColor(Color::Red),
                     Print("❌ Commit canceled by user.\n"),
                     ResetColor
                 )?;
+                terminal::disable_raw_mode()?;
                 return Ok(false);
             }
             _ => {
                 execute!(
                     stdout,
-                    cursor::MoveTo(0, prompt_row + 1),
                     terminal::Clear(ClearType::CurrentLine),
+                    cursor::MoveTo(0, row - 1),
+                    SetForegroundColor(Color::DarkGreen),
+                    Print("? "),
+                    ResetColor,
+                    Print(prompt),
+                    ResetColor,
+                    SetForegroundColor(Color::DarkGrey),
+                    Print(" (Y/n) "),
+                    ResetColor,
+                    SetForegroundColor(Color::DarkGreen),
+                )?;
+                execute!(
+                    stdout,
+                    cursor::MoveTo(0, row),
                     SetForegroundColor(Color::Red),
                     Print("Invalid input! Please enter Y or N."),
                     ResetColor,
-                    cursor::MoveTo(2 + prompt.len() as u16, prompt_row)
                 )?;
                 stdout.flush()?;
             }

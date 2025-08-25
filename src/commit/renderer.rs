@@ -1,7 +1,8 @@
 use std::io::{self, stdout, Write};
 
 use crossterm::{
-    cursor, execute,
+    cursor::{self},
+    execute,
     style::{Color, Print, ResetColor, SetForegroundColor},
     terminal::{self, ClearType},
 };
@@ -19,7 +20,6 @@ pub fn render_commit(stdout: &mut impl Write, parts: &RenderCommit) -> io::Resul
             ("", &parts.final_scope[..], "")
         };
 
-    // Commit header
     execute!(
         stdout,
         Print("\n\n"),
@@ -35,12 +35,12 @@ pub fn render_commit(stdout: &mut impl Write, parts: &RenderCommit) -> io::Resul
         Print(open_paren),
         SetForegroundColor(Color::Yellow),
         Print(inner),
+        ResetColor,
         Print(close_paren),
         ResetColor,
         Print(format!(": {}", &parts.desc))
     )?;
 
-    // Optional fields
     if !parts.longer_description.is_empty() {
         execute!(stdout, Print(format!("\n\n{}", &parts.longer_description)))?;
     }
@@ -60,12 +60,12 @@ pub fn render_commit(stdout: &mut impl Write, parts: &RenderCommit) -> io::Resul
         )?;
     }
 
-    // Footer
     execute!(
         stdout,
         SetForegroundColor(Color::DarkGrey),
-        Print("\n###--------------------------------------------------------###\n\n\n"),
+        Print("\n###--------------------------------------------------------###\n\n"),
         ResetColor,
+        cursor::SavePosition,
     )?;
 
     Ok(())
@@ -137,7 +137,7 @@ pub fn render_options(
     stdout.flush()
 }
 
-pub fn render_scope(chosen_type: &CommitType) -> io::Result<String> {
+pub fn render_scope() -> io::Result<String> {
     let mut stdout = stdout();
     let scopes = ["empty", "custom"];
     let mut selected = 0;
@@ -151,28 +151,11 @@ pub fn render_scope(chosen_type: &CommitType) -> io::Result<String> {
         execute!(
             stdout,
             SetForegroundColor(Color::DarkGreen),
-            Print("? "),
-            ResetColor,
-            Print("Select the type of change that you're committing: "),
-            ResetColor,
-            SetForegroundColor(Color::DarkGreen),
-            Print(format!(
-                "{} : {}\n",
-                chosen_type.key, chosen_type.description
-            )),
-            ResetColor,
-        )?;
-        execute!(
-            stdout,
-            SetForegroundColor(Color::DarkGreen),
             cursor::MoveTo(0, 1),
             Print("? "),
             ResetColor,
-            Print(format!(
-                "Denote the SCOPE of this change (optional) : {}",
-                chosen_type.key
-            )),
-            ResetColor
+            Print("Denote the SCOPE of this change (optional):"),
+            ResetColor,
         )?;
 
         render_options(
@@ -194,40 +177,21 @@ pub fn render_scope(chosen_type: &CommitType) -> io::Result<String> {
             window_size,
         )? {
             terminal::disable_raw_mode()?;
+            execute!(
+                stdout,
+                terminal::Clear(ClearType::CurrentLine),
+                cursor::RestorePosition,
+                cursor::MoveTo(0, 1),
+                Print("? "),
+                ResetColor,
+                Print("Denote the SCOPE of this change (optional):"),
+                SetForegroundColor(Color::DarkGreen),
+                Print(format!(" {}\n", scopes[chosen])),
+                ResetColor,
+            )?;
             break scopes[chosen].to_string();
         }
     };
-
-    execute!(
-        stdout,
-        terminal::Clear(ClearType::All),
-        cursor::MoveTo(0, 0),
-        SetForegroundColor(Color::DarkGreen),
-        Print("? "),
-        ResetColor,
-        Print("Select the type of change that you're committing: "),
-        ResetColor,
-        SetForegroundColor(Color::DarkGreen),
-        Print(format!(
-            "{} : {}\n",
-            chosen_type.key, chosen_type.description
-        )),
-        ResetColor,
-    )?;
-
-    println!();
-    execute!(
-        stdout,
-        cursor::MoveTo(0, 1),
-        SetForegroundColor(Color::DarkGreen),
-        Print("? "),
-        ResetColor,
-        Print("Denote the SCOPE of this change (optional): "),
-        ResetColor,
-        SetForegroundColor(Color::DarkGreen),
-        Print(&chosen_scope),
-    )?;
-    println!();
 
     Ok(chosen_scope)
 }

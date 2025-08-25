@@ -27,7 +27,7 @@ fn main() -> io::Result<()> {
     let mut stdout = stdout();
     execute!(stdout, EnterAlternateScreen)?;
     let chosen_type = read_commit_type()?;
-    let chosen_scope = render_scope(&chosen_type)?;
+    let chosen_scope = render_scope()?;
     let final_scope = read_scope(&chosen_scope)?;
 
     let desc = read_desc()?;
@@ -68,7 +68,7 @@ fn main() -> io::Result<()> {
     )?;
 
     if confirm_question("Are you sure you want to proceed with the commit above?")? {
-        execute!(stdout, Print("Commit confirmed!"))?;
+        execute!(stdout, ResetColor, Print("\nCommit confirmed!\n"))?;
     } else {
         terminal::disable_raw_mode()?;
         return Ok(());
@@ -90,8 +90,8 @@ fn main() -> io::Result<()> {
         execute!(
             stdout,
             SetForegroundColor(Color::DarkGreen),
-            Print("✅ Commit successful!\n"),
-            ResetColor
+            Print("\n✅ Commit successful!\n"),
+            ResetColor,
         )?;
     }
 

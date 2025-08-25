@@ -1,7 +1,8 @@
 use std::io::{self, stdout, Write};
 
 use crossterm::{
-    cursor, execute,
+    cursor::{self, SavePosition},
+    execute,
     style::{Color, Print, ResetColor, SetForegroundColor},
     terminal::{self, ClearType},
 };
@@ -25,7 +26,7 @@ pub fn read_desc() -> io::Result<String> {
         Print("Write a SHORT, IMPERATIVE tense description of the change:"),
         ResetColor,
         SetForegroundColor(Color::DarkGrey),
-        Print("\n[Infinity more chars allowed]\n "),
+        Print("\n [Infinity more chars allowed]\n "),
         ResetColor,
         SetForegroundColor(Color::DarkGreen),
         cursor::SavePosition,
@@ -69,21 +70,13 @@ pub fn read_multiline(prompt: &str) -> io::Result<String> {
         Print(prompt),
         ResetColor,
         SetForegroundColor(Color::DarkGrey),
-        Print("(press Enter to skip):\n"),
+        Print(" (press Enter to skip):\n "),
         ResetColor,
         SetForegroundColor(Color::DarkGreen)
     )?;
     stdout.flush()?;
 
     let input = handle_prompt_input()?;
-
-    if input.is_empty() {
-        execute!(
-            stdout,
-            terminal::Clear(ClearType::CurrentLine),
-            cursor::RestorePosition
-        )?
-    };
 
     Ok(input
         .trim()
@@ -104,7 +97,7 @@ pub fn read_issues() -> io::Result<(String, String)> {
         Print("Select the ISSUES type of change (optional), Input ISSUES prefix\n"),
         ResetColor,
         SetForegroundColor(Color::DarkGrey),
-        Print("(press Enter to skip):\n"),
+        Print(" (press Enter to skip):\n "),
         ResetColor,
     )?;
     io::stdout().flush()?;
@@ -131,12 +124,6 @@ pub fn read_issues() -> io::Result<(String, String)> {
         stdout.flush()?;
 
         issue_refs = handle_prompt_input()?.trim().to_string();
-    } else {
-        execute!(
-            stdout,
-            terminal::Clear(ClearType::CurrentLine),
-            cursor::RestorePosition
-        )?
     }
 
     Ok((issue_prefix, issue_refs))
@@ -160,7 +147,9 @@ pub fn read_commit_type() -> io::Result<CommitType> {
             Print("Select the type of change that you're committing: "),
             ResetColor
         )?;
+
         render_options(&mut stdout, &types, selected, offset, window_size)?;
+
         if let Some(chosen) = handle_input(
             &mut selected,
             &mut cursor,
@@ -171,6 +160,23 @@ pub fn read_commit_type() -> io::Result<CommitType> {
             break &types[chosen];
         }
     };
+
+    execute!(
+        stdout,
+        SetForegroundColor(Color::DarkGreen),
+        cursor::MoveTo(0, 0),
+        Print("? "),
+        ResetColor,
+        Print("Select the type of change that you're committing: "),
+        ResetColor,
+        SetForegroundColor(Color::DarkGreen),
+        Print(format!(
+            "{} : {}\n",
+            chosen_type.key, chosen_type.description
+        )),
+        SavePosition,
+        ResetColor,
+    )?;
 
     Ok(CommitType::new(&chosen_type.key, &chosen_type.description))
 }
@@ -183,11 +189,16 @@ pub fn read_scope(chosen_scope: &str) -> io::Result<String> {
             Print("? "),
             ResetColor,
             Print("Denote the SCOPE of this change: "),
+            SetForegroundColor(Color::DarkGrey),
             ResetColor,
             SetForegroundColor(Color::DarkGreen),
+            SavePosition,
+            terminal::Clear(ClearType::FromCursorDown)
         )?;
         stdout.flush()?;
         let custom_scope = handle_prompt_input()?;
+
+        execute!(stdout, Print("\n"))?;
         format!("({})", custom_scope.trim())
     } else {
         "".to_string()
