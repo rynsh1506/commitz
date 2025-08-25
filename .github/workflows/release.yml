@@ -25,13 +25,13 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: rustup target add x86_64-unknown-linux-musl
 
-      - name: Build release binary
-        run: |
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            cargo build --release --target x86_64-unknown-linux-musl
-          else
-            cargo build --release
-          fi
+      - name: Build Linux release binary
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo build --release --target x86_64-unknown-linux-musl
+
+      - name: Build non-Linux release binary
+        if: matrix.os != 'ubuntu-latest'
+        run: cargo build --release
 
       - name: Copy Linux artifact
         if: matrix.os == 'ubuntu-latest'
