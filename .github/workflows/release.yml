@@ -24,32 +24,44 @@ jobs:
       - name: Build release binary
         run: cargo build --release
 
-      - name: Upload artifact
+      - name: Upload artifact per OS
         uses: actions/upload-artifact@v4
         with:
           name: commitz-${{ matrix.os }}
-          path: target/release/commitz*
+          path: target/release/commitz* -> target/release/commitz-${{ matrix.os }}
 
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
         with:
           name: commitz-ubuntu-latest
-          path: .
-      - uses: actions/download-artifact@v4
+          path: ./linux
+
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
         with:
           name: commitz-macos-latest
-          path: .
-      - uses: actions/download-artifact@v4
+          path: ./mac
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
         with:
           name: commitz-windows-latest
-          path: .
+          path: ./win
+
+      - name: Prepare files for release
+        run: |
+          mkdir -p release
+          cp linux/commitz release/commitz-linux
+          cp mac/commitz release/commitz-mac
+          cp win/commitz.exe release/commitz.exe
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: commitz*
+          files: release/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
