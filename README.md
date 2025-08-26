@@ -1,6 +1,11 @@
 # commitz
 
-`commitz` adalah CLI sederhana untuk membuat commit message yang konsisten (mirip commitizen) dengan antarmuka TUI berbasis `crossterm`.
+---
+
+## 🤝 Tentang Commitz
+
+Commitz adalah aplikasi **TUI (Text User Interface)** untuk membantu membuat pesan commit sesuai standar konvensi.  
+Dibuat dengan ❤️ menggunakan **Rust + Crossterm**.
 
 ---
 
@@ -78,13 +83,6 @@ commitz/
 │       ├── navigation.rs # handle arrow key / pointer
 │       └── validator.rs  # validasi input (Y/n, dsb)
 ```
-
----
-
-## 🤝 Tentang Commitz
-
-Commitz adalah aplikasi **TUI (Text User Interface)** untuk membantu membuat pesan commit sesuai standar konvensi.  
-Dibuat dengan ❤️ menggunakan **Rust + Crossterm**.
 
 ---
 
