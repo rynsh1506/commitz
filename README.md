@@ -76,7 +76,7 @@ commitz/
 │       ├── reader.rs     # baca commit config/json
 │       ├── renderer.rs   # render ke layar pakai crossterm
 │       ├── navigation.rs # handle arrow key / pointer
-│       ├── validator.rs  # validasi input (Y/n, dsb)
+│       └── validator.rs  # validasi input (Y/n, dsb)
 ```
 
 ---
