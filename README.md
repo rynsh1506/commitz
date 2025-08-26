@@ -1,7 +1,5 @@
 # commitz
 
----
-
 ## 🤝 Tentang Commitz
 
 Commitz adalah aplikasi **TUI (Text User Interface)** untuk membantu membuat pesan commit sesuai standar konvensi.  
