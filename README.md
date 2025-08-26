@@ -72,13 +72,11 @@ commitz/
 │   ├── lib.rs            # expose semua module
 │   ├── main.rs           # CLI entrypoint
 │   └── commit/
-│       ├── mod.rs        # pub mod commit { ... }
 │       ├── types.rs      # definisi CommitType, dsb
 │       ├── reader.rs     # baca commit config/json
 │       ├── renderer.rs   # render ke layar pakai crossterm
 │       ├── navigation.rs # handle arrow key / pointer
 │       ├── validator.rs  # validasi input (Y/n, dsb)
-│       └── signal.rs     # handle ctrl+c / exit clean
 ```
 
 ---
