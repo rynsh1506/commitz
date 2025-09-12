@@ -23,7 +23,6 @@ pub struct RenderCommit {
 }
 
 impl RenderCommit {
-    /// Constructor untuk RenderCommit
     pub fn new(
         chosen_type: String,
         final_scope: String,
