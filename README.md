@@ -102,5 +102,4 @@ Created by [@rynsh1506](https://github.com/rynsh1506)
 Jika ada ide, kritik, atau saran jangan ragu buat buka **issue** atau bikin **PR** 🚀
 
 
-
-<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'X8X31YLACE');kofiwidget2.draw();</script> 
+[![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X31YLACE)
